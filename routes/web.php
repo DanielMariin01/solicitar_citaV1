@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\FormularioCitaController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
+
 
 use App\Livewire\Formulario;
  // Asegúrate de importar tu componente Livewire
@@ -11,7 +13,7 @@ Route::get('/', function () {
 
 // 1. Ruta para MOSTRAR el formulario de cita (método GET)
 // Esta ruta es la única que debe usar la URL '/solicitar-cita' con el método GET.
-Route::get('/solicitarcita', [FormularioCitaController::class, 'mostrarFormulario'])->name('solicitarcitas.formulario');
+Route::get('/formulario', [FormularioCitaController::class, 'mostrarFormulario'])->name('solicitarcitas.formulario');
 
 // 2. Ruta para GUARDAR los datos del formulario (método POST)
 // Esta ruta es para enviar los datos, no para mostrar el formulario.

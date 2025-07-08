@@ -23,8 +23,8 @@ class AdminMedicoPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->id('admin_medico')
-            ->path('admin_medico')
+            ->id('adminmedico')
+            ->path('adminmedico')
             ->login()
             ->favicon(asset('imagenes/logo.png'))
             ->brandLogo(asset('imagenes/logo.png'))
