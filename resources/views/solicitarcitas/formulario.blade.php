@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
  
   <title>Formulario de Cita</title>
@@ -164,7 +165,12 @@ select {
     color: #555;         /* Color de texto gris */
     word-break: break-all; /* Rompe palabras largas para que quepan */
 }
-
+.phone-icon {
+    color: #8DA3E9; /* Un azul primario para el icono */
+    margin-right: 8px; /* Un poco más de espacio */
+    font-size: 1.2em; /* Puedes ajustar el tamaño si quieres que sea un poco más grande que el texto */
+    vertical-align: middle; /* Para alinear el icono con el texto */
+}
 /* --- RESPONSIVE DESIGN --- */
 @media (min-width: 768px) {
   .form-group.half {
@@ -435,6 +441,12 @@ select {
       <!--</div>--->
 
       <button type="submit" class="btn-submit">Solicitar Cita</button>
+   <div class="contact-info">
+    <h3>Líneas de Atención</h3>
+    <p><i class="bi bi-telephone-fill phone-icon"></i> <strong>Radiólogos Asociados:</strong> CITAS: (606) 340 23 33</p>
+    <p><i class="bi bi-telephone-fill phone-icon"></i> <strong>CEDICAF:</strong> CITAS: (606) 340 2111</p>
+    <p><i class="bi bi-telephone-fill phone-icon"></i> <strong>DIAXME:</strong> CITAS: (608) 6836182</p>
+</div>
     </form>
   </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -472,7 +484,7 @@ $('#tipo_identificacion').select2({ // Si lo tienes
                     return 'Por favor, ingrese ' + remainingChars + ' o más caracteres para buscar.';
                 },
                 noResults: function() {
-                    return 'No se encontraron resultados.';
+                    return 'No se encontraron resultados. Por favor, intente con otra búsqueda o comuníquese con nuestras líneas de atención.';
                 },
                 searching: function() {
                     return 'Buscando...';

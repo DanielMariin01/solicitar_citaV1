@@ -222,7 +222,9 @@ protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
               ->defaultPaginationPageOption(10)
             ->paginationPageOptions([10, 25, 50, 100])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('id_eps')
+                    ->label('EPS')
+                  ->relationship('eps', 'nombre'),
             ])
             ->actions([
                   Tables\Actions\EditAction::make()
