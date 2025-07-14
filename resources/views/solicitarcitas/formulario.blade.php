@@ -191,7 +191,7 @@ select {
   <div class="form-container">
         <img src="{{ asset('imagenes/logo.png') }}" alt="Logo" style="display:block; margin:0 auto 20px auto; max-width:160px;">
     <h2>Solicitar Cita</h2>
-    <form action="{{ route('solicitar-cita.guardar') }}" method="POST" enctype="multipart/form-data">   
+    <form action="{{ route('solicitar-cita.guardar') }}" method="POST" enctype="multipart/form-data" id="formularioCita">   
     @csrf
    <div class="form-group half">
     <label for="nombre" class="form-label">Nombre</label>
@@ -243,15 +243,15 @@ select {
         </select>
       </div>
 
-  <div class="form-group half">
-    <label for="" class="form-label">Número de documento</label>
-    <input 
-        type="text" 
-        name="numero_identificacion" 
-        id="numero_identificacion" 
+<div class="form-group half">
+    <label for="numero_identificacion" class="form-label">Número de documento</label>
+    <input
+        type="text"
+        name="numero_identificacion"
+        id="numero_identificacion"
         placeholder="Ingrese su numero de documento"
-        class="form-control @error('numero_identificacion') is-invalid @else @if(old('numero_identificacion')) is-valid @endif @enderror" 
-        value="{{ old('numero_identificacion') }}" 
+        class="form-control @error('numero_identificacion') is-invalid @else @if(old('numero_identificacion')) is-valid @endif @enderror"
+        value="{{ old('numero_identificacion') }}"
         required
     >
     @error('numero_identificacion')
@@ -261,19 +261,20 @@ select {
             <div class="valid-feedback"></div>
         @endif
     @enderror
+    {{-- OPCIONAL: Puedes añadir un mensaje de ayuda aquí --}}
+    <small id="numero-identificacion-help" class="form-text text-muted d-none">No se permiten puntos o comas.</small>
 </div>
-
-
-  <div class="form-group half">
-    <label for="" class="form-label">Celular</label>
-    <input 
-        type="text" 
-        name="celular" 
-        id="celular" 
+<div class="form-group half">
+    <label for="celular" class="form-label">Celular</label>
+    <input
+        type="text"
+        name="celular"
+        id="celular"
         placeholder="Ingrese su numero de celular"
-        class="form-control @error('celular') is-invalid @else @if(old('celular')) is-valid @endif @enderror" 
-        value="{{ old('celular') }}" 
+        class="form-control @error('celular') is-invalid @else @if(old('celular')) is-valid @endif @enderror"
+        value="{{ old('celular') }}"
         required
+        maxlength="10" {{-- Esto es un límite HTML básico, el JS será más estricto --}}
     >
     @error('celular')
         <div class="invalid-feedback">{{ $message }}</div>
@@ -282,17 +283,19 @@ select {
             <div class="valid-feedback"></div>
         @endif
     @enderror
+    {{-- OPCIONAL: Mensaje de ayuda para el celular --}}
+    <small id="celular-help" class="form-text text-muted d-none">Debe contener 10 dígitos numéricos.</small>
 </div>
 
-      <div class="form-group half">
+ <div class="form-group half">
     <label for="correo" class="form-label">Correo</label>
-    <input 
-        type="text" 
-        name="correo" 
-        id="correo" 
+    <input
+        type="email" {{-- CAMBIADO DE "text" A "email" --}}
+        name="correo"
+        id="correo"
         placeholder="Ingrese su correo electrónico"
-        class="form-control @error('correo') is-invalid @else @if(old('correo')) is-valid @endif @enderror" 
-        value="{{ old('correo') }}" 
+        class="form-control @error('correo') is-invalid @else @if(old('correo')) is-valid @endif @enderror"
+        value="{{ old('correo') }}"
         required
     >
     @error('correo')
@@ -302,6 +305,8 @@ select {
             <div class="valid-feedback"></div>
         @endif
     @enderror
+    {{-- Opcional: Mensaje de ayuda si quieres ser más explícito --}}
+    <small id="correo-help" class="form-text text-muted d-none">Debe ser un correo electrónico válido (ej. usuario@ejemplo.com).</small>
 </div>
 
 <div class="form-group half">
@@ -407,9 +412,11 @@ select {
     'name' => 'historia_clinica', // Se asignará como nombre del input (Laravel lo usará para $request->historia_clinica)
     'label' => 'Historia Clínica',
     'helpText' => 'Suba aquí la historia clínica',
+    'descriptionText' =>  "Es un documento con información sobre tu estado de salud y tratamientos previos.",
     'multiple' => false, // O true, según necesites
     'required' => true,
     'accept' => $acceptedFileTypes,
+ 
 ])
 
 @include('components.component-archivo', [
@@ -420,6 +427,7 @@ select {
     'multiple' => false, // O true, según necesites
     'required' => true,
     'accept' => $acceptedFileTypes,
+    'descriptionText' =>  "Documento de tu aseguradora (EPS/Medicina Prepagada) que aprueba el servicio médico.",
 ])
 
 
@@ -431,6 +439,7 @@ select {
     'multiple' => false, // O true, según necesites
     'required' => true,
     'accept' => $acceptedFileTypes,
+     'descriptionText' =>  "Es el documento emitido por tu médico que solicita un procedimiento o examen.",
 ])
       <!--<div class="form-group">
         <!--<div class="form-check">
@@ -440,7 +449,7 @@ select {
         <!--<div class="error">Debes aceptar antes de continuar.</div>
       <!--</div>--->
 
-      <button type="submit" class="btn-submit">Solicitar Cita</button>
+      <button type="submit" class="btn-submit" id="btnSubmitForm">Solicitar Cita</button>
    <div class="contact-info">
     <h3>Líneas de Atención</h3>
     <p><i class="bi bi-telephone-fill phone-icon"></i> <strong>Radiólogos Asociados:</strong> CITAS: (606) 340 23 33</p>
@@ -452,6 +461,7 @@ select {
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.0/dist/sweetalert2.all.min.js"></script>
 <script>
         const URL_BUSCAR_PROCEDIMIENTOS = "{{ route('api.procedimientos.buscar') }}";
     // Este es un ÚNICO bloque que se ejecuta cuando el DOM está listo.
@@ -470,6 +480,8 @@ $('#id_ciudad').select2({
 $('#tipo_identificacion').select2({ // Si lo tienes
     width: '100%'
 });
+
+
 
         // ================================================================
         // 2. Inicialización de Select2 con búsqueda remota (AJAX) para PROCEDIMIENTOS
@@ -540,7 +552,159 @@ $('#tipo_identificacion').select2({ // Si lo tienes
                 }
             });
         });
+
+      const numeroIdentificacionInput = document.getElementById('numero_identificacion');
+const numeroIdentificacionHelpText = document.getElementById('numero-identificacion-help'); // Si añadiste el small tag opcional
+
+if (numeroIdentificacionInput) {
+    numeroIdentificacionInput.addEventListener('input', function() {
+        const originalValue = this.value;
+        // Reemplaza CUALQUIER COSA QUE NO SEA UN DÍGITO (0-9) con una cadena vacía
+        const cleanedValue = originalValue.replace(/[^0-9]/g, '');
+
+        if (originalValue !== cleanedValue) {
+            this.value = cleanedValue;
+            // Mostrar mensaje de ayuda si había caracteres no permitidos
+            if (numeroIdentificacionHelpText) {
+                numeroIdentificacionHelpText.classList.remove('d-none');
+                numeroIdentificacionHelpText.textContent = 'Solo se permiten dígitos numéricos';
+                numeroIdentificacionHelpText.style.color = 'orange'; // Resaltar el aviso
+            }
+        } else {
+            // Ocultar mensaje si el valor es válido o se ha limpiado y no hay errores
+            if (numeroIdentificacionHelpText && cleanedValue.length > 0) { // Ocultar solo si hay algo escrito
+                numeroIdentificacionHelpText.classList.add('d-none');
+                numeroIdentificacionHelpText.textContent = ''; // Limpiar el texto
+            }
+        }
+    });
+
+    // Ocultar el mensaje si el campo se borra o se pierde el foco y está vacío
+    numeroIdentificacionInput.addEventListener('blur', function() {
+        if (numeroIdentificacionHelpText && this.value === '') {
+            numeroIdentificacionHelpText.classList.add('d-none');
+        }
+    });
+}
+
+
+// NUEVO CÓDIGO - Lógica para el campo Celular: solo 10 dígitos numéricos
+// ================================================================
+const celularInput = document.getElementById('celular');
+const celularHelpText = document.getElementById('celular-help');
+const MAX_DIGITOS_CELULAR = 10;
+
+if (celularInput) {
+    celularInput.addEventListener('input', function() {
+        const originalValue = this.value;
+        // 1. Elimina cualquier caracter que no sea un dígito (0-9)
+        let cleanedValue = originalValue.replace(/[^0-9]/g, '');
+
+        // 2. Limita la longitud a MAX_DIGITOS_CELULAR
+        if (cleanedValue.length > MAX_DIGITOS_CELULAR) {
+            cleanedValue = cleanedValue.substring(0, MAX_DIGITOS_CELULAR);
+        }
+
+        // Actualiza el valor del input si hubo cambios
+        if (this.value !== cleanedValue) {
+            this.value = cleanedValue;
+        }
+
+        // 3. Muestra/oculta el mensaje de ayuda
+        if (cleanedValue.length > 0 && cleanedValue.length !== MAX_DIGITOS_CELULAR) {
+            if (celularHelpText) {
+                celularHelpText.classList.remove('d-none');
+                celularHelpText.textContent = `El número debe tener ${MAX_DIGITOS_CELULAR} dígitos. (Llevas ${cleanedValue.length})`;
+                celularHelpText.style.color = 'orange'; // Resaltar el aviso
+            }
+        } else if (cleanedValue.length === MAX_DIGITOS_CELULAR) {
+            if (celularHelpText) {
+                celularHelpText.classList.add('d-none'); // Ocultar si la longitud es correcta
+                celularHelpText.textContent = '';
+            }
+        } else { // Campo vacío
+            if (celularHelpText) {
+                celularHelpText.classList.add('d-none');
+                celularHelpText.textContent = '';
+            }
+        }
+    });
+
+    // Ocultar el mensaje si el campo se borra o se pierde el foco y está vacío
+    celularInput.addEventListener('blur', function() {
+        if (celularHelpText && this.value === '') {
+            celularHelpText.classList.add('d-none');
+        }
+    });
+}
+
+// ================================================================
+// NUEVO CÓDIGO (Opcional) - Lógica para el campo Correo Electrónico
+// ================================================================
+const correoInput = document.getElementById('correo');
+const correoHelpText = document.getElementById('correo-help');
+
+if (correoInput && correoHelpText) {
+    correoInput.addEventListener('input', function() {
+        // La validación nativa de HTML5 con type="email" es bastante buena.
+        // Aquí solo actualizamos el mensaje de ayuda si el campo está vacío
+        // o si queremos reforzar el patrón.
+        if (this.value.length === 0) {
+            correoHelpText.classList.remove('d-none');
+            correoHelpText.textContent = 'Ingrese su correo electrónico.';
+            correoHelpText.style.color = '#6c757d'; // Color de texto normal
+        } else if (!correoInput.checkValidity()) { // checkValidity() usa la validación nativa del navegador
+            correoHelpText.classList.remove('d-none');
+            correoHelpText.textContent = 'Por favor, ingrese un formato de correo electrónico válido.';
+            correoHelpText.style.color = 'orange';
+        } else {
+            correoHelpText.classList.add('d-none');
+            correoHelpText.textContent = '';
+        }
+    });
+
+    correoInput.addEventListener('blur', function() {
+        if (correoHelpText && this.value === '') {
+            correoHelpText.classList.add('d-none');
+        }
+    });
+}
+
+const formCita = document.getElementById('formularioCita'); // Asegúrate de que tu formulario tiene id="formCita"
+const btnSubmitForm = document.getElementById('btnSubmitForm'); // Asegúrate de que tu botón tiene id="btnSubmitForm"
+
+if (formCita && btnSubmitForm) {
+    formCita.addEventListener('submit', function() {
+        // Deshabilitar el botón para evitar múltiples envíos
+        btnSubmitForm.disabled = true;
+        // Cambiar el texto y añadir un spinner de Bootstrap
+        btnSubmitForm.innerHTML = `
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Enviando solicitud...
+        `;
+    });
+}
+
     }); // Cierre del ÚNICO listener DOMContentLoaded
-</script>
+     @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: '¡Solicitud enviada!',
+            text: '{{ session('success') }}',
+            showConfirmButton: false,
+            timer: 4000
+        });
+        @endif
+
+        @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: '¡Error!',
+            text: '{{ session('error') }}',
+            showConfirmButton: true
+        });
+        @endif
+
+    </script>
 </body>
 </html>

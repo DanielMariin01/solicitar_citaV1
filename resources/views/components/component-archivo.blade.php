@@ -1,6 +1,23 @@
+
+
+@props([
+    'label',
+    'id',
+    'name',
+    'helpText',
+    'multiple' => false,
+    'required' => false,
+    'accept' => null,
+    'descriptionText' => null, // <--- ¡Asegúrate de que esta línea esté aquí!
+])
+
 <div class="form-group full">
     <label class="form-label">{{ $label }}</label>
-
+ @if ($descriptionText)
+        <small class="form-text text-muted mb-2">
+            {{ $descriptionText }}
+        </small>
+    @endif
     <div class="upload-area" id="{{ $id }}-area">
         <p><strong>{{ $helpText }}</strong></p>
      

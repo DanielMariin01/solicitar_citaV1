@@ -67,7 +67,7 @@ protected function mutateFormDataBeforeSave(array $data): array
                 return $data;
             }
 
-            Mail::to($pacienteEmail)->queue(new SolicitudEstadoActualizadoMail($record, $new_estado, $new_comentario));
+            Mail::to($pacienteEmail)->send(new SolicitudEstadoActualizadoMail($record, $new_estado, $new_comentario));
             Log::info('Correo de actualización de estado ENCOLADO exitosamente (desde Filament Edit).');
 
         } catch (Throwable $e) {
