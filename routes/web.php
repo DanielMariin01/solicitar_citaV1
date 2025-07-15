@@ -3,7 +3,9 @@
 use App\Http\Controllers\FormularioCitaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
-
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Facades\Response;
 
 use App\Livewire\Formulario;
  // Asegúrate de importar tu componente Livewire
@@ -23,6 +25,21 @@ Route::post('/solicitarcita', [FormularioCitaController::class, 'guardar'])->nam
 // Esta ruta usa una URL diferente para evitar conflictos.
 // La URL es '/api/procedimientos/buscar'.
 Route::get('/api/procedimientos/buscar', [FormularioCitaController::class, 'buscar'])->name('api.procedimientos.buscar');
+
+
+Route::get('/solicitarcita/ver-archivo/{tipo}/{archivo}', function ($tipo, $archivo) {
+    if (!preg_match('/^[a-zA-Z0-9_\-\.]+$/', $archivo)) {
+        abort(403, 'Nombre de archivo no válido.');
+    }
+
+    $path = storage_path('app/public/archivos/' . $tipo . '/' . $archivo);
+
+    if (!file_exists($path)) {
+        abort(404, 'Archivo no encontrado.');
+    }
+
+    return Response::file($path);
+});
 
 
 

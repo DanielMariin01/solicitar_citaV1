@@ -6,22 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Solicitud_agendamiento extends Model
 {
-     protected $table = 'solicitud_admisiones'; // Nombre de la tabla
+     protected $table = 'agendamiento'; // Nombre de la tabla
     
-    protected $primaryKey = 'id_solicitud_admision';
+    protected $primaryKey = 'id_agendamiento';
 
     // Atributos que son asignables en masa
     protected $fillable = [
-        'fk_paciente',
-        'estado',
-        'comentario',
-        'hora',
         'fecha',
+        'hora',
+        'comentario',
+        'estado',
+        'archivo',
+    
     ];
 
-    // Relación con Paciente
-    public function paciente()
-    {
-        return $this->belongsTo(Paciente::class, 'fk_paciente', 'id_paciente');
-    }
+
+   
 }

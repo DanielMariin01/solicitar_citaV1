@@ -112,73 +112,52 @@ class SolicitudMedicoResource extends Resource
                         'class' => 'whitespace-normal', // Asegura que el texto se envuelva (aunque ->wrap() ya lo hace)
                         'style' => 'max-width: 300px; word-break: break-word;', // Ayuda con palabras muy largas
                     ]), 
-               
-                Tables\Columns\TextColumn::make('paciente.historia_clinica') // <-- ¡Aquí usas la notación de punto!
-                    ->label('Historia Clínica')
-                    ->formatStateUsing(function ($state) {
-                        if (empty($state)) { // Usar empty para cubrir null, cadenas vacías o 0
-                            return '<span class="text-gray-500 italic">No disponible</span>';
-                        }
+              Tables\Columns\TextColumn::make('paciente.historia_clinica')
+    ->label('Historia Clínica')
+    ->formatStateUsing(function ($state) {
+        if (!$state) {
+            return '<span class="text-gray-500 italic">No disponible</span>';
+        }
 
-                        $url = asset('storage/' . $state);
-                        $ext = strtolower(pathinfo($state, PATHINFO_EXTENSION));
+        $archivo = basename($state);
+        $url = url('/solicitarcita/ver-archivo/historia_clinica/' . $archivo);
 
-                        // Usar 'currentColor' para que el SVG tome el color del texto del enlace
-                        $icon = match ($ext) {
-                            'pdf' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 2H8a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8l5-5V4a2 2 0 0 0-2-2z"/></svg>',
-                            'png', 'jpg', 'jpeg', 'gif' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 2H5a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-1.5 15h-11L6 14.5 9 12l2.5 2.5L15 11z"/></svg>',
-                            default => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>',
-                        };
-
-                        // Clases de Filament para un buen estilo de enlace
-                        return '<a href="' . $url . '" target="_blank" class="flex items-center gap-2 text-primary-600 hover:text-primary-700 font-semibold">' . $icon . 'Visualizar                                                                                                                                                                                                                                                                                                                                                                               </a>';
-                    })
-                    ->html(),
-                
-                    Tables\Columns\TextColumn::make('paciente.autorizacion') // <-- ¡Aquí usas la notación de punto!
-                    ->label('Autorizacion')
-                    ->formatStateUsing(function ($state) {
-                        if (empty($state)) { // Usar empty para cubrir null, cadenas vacías o 0
-                            return '<span class="text-gray-500 italic">No disponible</span>';
-                        }
-
-                        $url = asset('storage/' . $state);
-                        $ext = strtolower(pathinfo($state, PATHINFO_EXTENSION));
-
-                        // Usar 'currentColor' para que el SVG tome el color del texto del enlace
-                        $icon = match ($ext) {
-                            'pdf' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 2H8a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8l5-5V4a2 2 0 0 0-2-2z"/></svg>',
-                            'png', 'jpg', 'jpeg', 'gif' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 2H5a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-1.5 15h-11L6 14.5 9 12l2.5 2.5L15 11z"/></svg>',
-                            default => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>',
-                        };
-
-                        // Clases de Filament para un buen estilo de enlace
-                        return '<a href="' . $url . '" target="_blank" class="flex items-center gap-2 text-primary-600 hover:text-primary-700 font-semibold">' . $icon . 'Visualizar                                                                                                                                                                                                                                                                                                                                                                               </a>';
-                    })
-                    ->html(),
+        return '<a href="' . $url . '" target="_blank" style="color: #1d4ed8; font-weight: 600;">Visualizar</a>';
+    })
+    ->html(),
 
 
-                    Tables\Columns\TextColumn::make('paciente.orden_medica') // <-- ¡Aquí usas la notación de punto!
-                    ->label('Orden medica')
-                    ->formatStateUsing(function ($state) {
-                        if (empty($state)) { // Usar empty para cubrir null, cadenas vacías o 0
-                            return '<span class="text-gray-500 italic">No disponible</span>';
-                        }
+              Tables\Columns\TextColumn::make('paciente.autorizacion')
+    ->label('Autorización')
+    ->formatStateUsing(function ($state) {
+        if (!$state) {
+            return '<span class="text-gray-500 italic">No disponible</span>';
+        }
 
-                        $url = asset('storage/' . $state);
-                        $ext = strtolower(pathinfo($state, PATHINFO_EXTENSION));
+        $archivo = basename($state);
+        $url = url('/solicitarcita/ver-archivo/autorizacion/' . $archivo);
 
-                        // Usar 'currentColor' para que el SVG tome el color del texto del enlace
-                        $icon = match ($ext) {
-                            'pdf' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 2H8a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8l5-5V4a2 2 0 0 0-2-2z"/></svg>',
-                            'png', 'jpg', 'jpeg', 'gif' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 2H5a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-1.5 15h-11L6 14.5 9 12l2.5 2.5L15 11z"/></svg>',
-                            default => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>',
-                        };
+        return '<a href="' . $url . '" target="_blank" style="color: #1d4ed8; font-weight: 600;">Visualizar</a>';
+    })
+    ->html(),
 
-                        // Clases de Filament para un buen estilo de enlace
-                        return '<a href="' . $url . '" target="_blank" class="flex items-center gap-2 text-primary-600 hover:text-primary-700 font-semibold">' . $icon . 'Visualizar                                                                                                                                                                                                                                                                                                                                                                               </a>';
-                    })
-                    ->html(),
+
+
+            Tables\Columns\TextColumn::make('paciente.orden_medica')
+    ->label('Orden Médica')
+    ->formatStateUsing(function ($state) {
+        if (!$state) {
+            return '<span class="text-gray-500 italic">No disponible</span>';
+        }
+
+        $archivo = basename($state);
+        $url = url('/solicitarcita/ver-archivo/orden_medica/' . $archivo);
+
+        return '<a href="' . $url . '" target="_blank" style="color: #1d4ed8; font-weight: 600;">Visualizar</a>';
+    })
+    ->html(),
+
+
 
             
                 BadgeColumn::make('estado')
@@ -269,36 +248,48 @@ class SolicitudMedicoResource extends Resource
                         TextEntry::make('paciente.ciudad.nombre')->label('Ciudad'),
                         TextEntry::make('paciente.eps.nombre')->label('EPS'),
 
-                            TextEntry::make('paciente.historia_clinica')     
-                            ->label('Historia Clínica')
-                            ->formatStateUsing(function ($state) {
-                                if (!$state) {
-                                    return '<span class="text-gray-500 italic">No disponible</span>';
-                                }
-                                $url = asset('storage/' . $state);
-                                return '<a href="' . $url . '" target="_blank" class="text-blue-600 hover:underline">Visualizar</a>';
-                            })
-                            ->html(),
-                           TextEntry::make('paciente.autorizacion')     
-                            ->label('Autorización')
-                            ->formatStateUsing(function ($state) {
-                                if (!$state) {
-                                    return '<span class="text-gray-500 italic">No disponible</span>';
-                                }
-                                $url = asset('storage/' . $state);
-                                return '<a href="' . $url . '" target="_blank" class="text-blue-600 hover:underline">Visualizar</a>';
-                            })
-                            ->html(),
-                        TextEntry::make('paciente.orden_medica')
-                            ->label('Orden Médica')
-                            ->formatStateUsing(function ($state) {
-                                if (!$state) {
-                                    return '<span class="text-gray-500 italic">No disponible</span>';
-                                }
-                                $url = asset('storage/' . $state);
-                                return '<a href="' . $url . '" target="_blank" class="text-blue-600 hover:underline">Visualizar</a>';
-                            })
-                            ->html(),
+                           
+                   TextEntry::make('paciente.historia_clinica')
+    ->label('Historia Clínica')
+    ->formatStateUsing(function ($state) {
+        if (!$state) {
+            return '<span class="text-gray-500 italic">No disponible</span>';
+        }
+
+        $archivo = basename($state);
+        $url = url('/solicitarcita/ver-archivo/historia_clinica/' . $archivo);
+
+        return '<a href="' . $url . '" target="_blank" class="text-blue-600 hover:underline font-semibold">Visualizar</a>';
+    })
+    ->html(),
+
+                         TextEntry::make('paciente.autorizacion')
+    ->label('Autorización')
+    ->formatStateUsing(function ($state) {
+        if (!$state) {
+            return '<span class="text-gray-500 italic">No disponible</span>';
+        }
+
+        $archivo = basename($state);
+        $url = url('/solicitarcita/ver-archivo/autorizacion/' . $archivo);
+
+        return '<a href="' . $url . '" target="_blank" class="text-blue-600 hover:underline font-semibold">Visualizar</a>';
+    })
+    ->html(),
+TextEntry::make('paciente.orden_medica')
+    ->label('Orden Médica')
+    ->formatStateUsing(function ($state) {
+        if (!$state) {
+            return '<span class="text-gray-500 italic">No disponible</span>';
+        }
+
+        $archivo = basename($state);
+        $url = url('/solicitarcita/ver-archivo/orden_medica/' . $archivo);
+
+        return '<a href="' . $url . '" target="_blank" class="text-blue-600 hover:underline font-semibold">Visualizar</a>';
+    })
+    ->html(),
+
                         TextEntry::make('created_at')->label('Fecha de Creación')
                             ->dateTime('d/m/Y H:i:s'),
                         TextEntry::make('updated_at')->label('Fecha de Actualización')

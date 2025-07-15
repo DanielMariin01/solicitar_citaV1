@@ -137,66 +137,51 @@ class PacienteResource extends Resource
                     ]),
 
                 //mostrar los archivos subidos pero que se puedan descargar
-                Tables\Columns\TextColumn::make('historia_clinica')
-                    ->label('Historia Clínica')
-                    ->formatStateUsing(function ($state) {
-                        if (!$state) {
-                            return '<span class="text-gray-500 italic">No disponible</span>';
-                        }
+         Tables\Columns\TextColumn::make('historia_clinica')
+    ->label('Historia Clínica')
+    ->formatStateUsing(function ($state) {
+        if (!$state) {
+            return '<span class="text-gray-500 italic">No disponible</span>';
+        }
 
-                        $url = asset('storage/' . $state);
-                        $ext = strtolower(pathinfo($state, PATHINFO_EXTENSION));
+        $archivo = basename($state);
+        $url = url('/solicitarcita/ver-archivo/historia_clinica/' . $archivo);
 
-                        // Solo un ícono simple SVG con color negro para prueba
-                        $icon = match ($ext) {
-                            'pdf' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" viewBox="0 0 24 24"><path d="M19 2H8a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8l5-5V4a2 2 0 0 0-2-2z"/></svg>',
-                            default => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>',
-                        };
-
-                        return '<a href="' . $url . '" target="_blank" style="display:inline-flex; align-items:center; gap:6px; color:#1d4ed8; font-weight:600;">' . $icon . 'Visualizar</a>';
-                    })
-                    ->html(),
-
-                Tables\Columns\TextColumn::make('autorizacion')
-                    ->label('Autorizacion')
-                    ->formatStateUsing(function ($state) {
-                        if (!$state) {
-                            return '<span class="text-gray-500 italic">No disponible</span>';
-                        }
-
-                        $url = asset('storage/' . $state);
-                        $ext = strtolower(pathinfo($state, PATHINFO_EXTENSION));
-
-                        // Solo un ícono simple SVG con color negro para prueba
-                        $icon = match ($ext) {
-                            'pdf' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" viewBox="0 0 24 24"><path d="M19 2H8a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8l5-5V4a2 2 0 0 0-2-2z"/></svg>',
-                            default => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>',
-                        };
-
-                        return '<a href="' . $url . '" target="_blank" style="display:inline-flex; align-items:center; gap:6px; color:#1d4ed8; font-weight:600;">' . $icon . ' Visualizar</a>';
-                    })
-                    ->html(),
+        return '<a href="' . $url . '" target="_blank" style="color: #1d4ed8; font-weight: 600;">Visualizar</a>';
+    })
+    ->html(),
 
 
-                Tables\Columns\TextColumn::make('orden_medica')
-                    ->label('Orden medica')
-                    ->formatStateUsing(function ($state) {
-                        if (!$state) {
-                            return '<span class="text-gray-500 italic">No disponible</span>';
-                        }
+              Tables\Columns\TextColumn::make('autorizacion')
+    ->label('Autorización')
+    ->formatStateUsing(function ($state) {
+        if (!$state) {
+            return '<span class="text-gray-500 italic">No disponible</span>';
+        }
 
-                        $url = asset('storage/' . $state);
-                        $ext = strtolower(pathinfo($state, PATHINFO_EXTENSION));
+        $archivo = basename($state);
+        $url = url('/solicitarcita/ver-archivo/autorizacion/' . $archivo);
 
-                        // Solo un ícono simple SVG con color negro para prueba
-                        $icon = match ($ext) {
-                            'pdf' => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" viewBox="0 0 24 24"><path d="M19 2H8a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8l5-5V4a2 2 0 0 0-2-2z"/></svg>',
-                            default => '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>',
-                        };
+        return '<a href="' . $url . '" target="_blank" style="color: #1d4ed8; font-weight: 600;">Visualizar</a>';
+    })
+    ->html(),
 
-                        return '<a href="' . $url . '" target="_blank" style="display:inline-flex; align-items:center; gap:6px; color:#1d4ed8; font-weight:600;">' . $icon . ' Visualizar</a>';
-                    })
-                    ->html(),
+
+
+            Tables\Columns\TextColumn::make('orden_medica')
+    ->label('Orden Médica')
+    ->formatStateUsing(function ($state) {
+        if (!$state) {
+            return '<span class="text-gray-500 italic">No disponible</span>';
+        }
+
+        $archivo = basename($state);
+        $url = url('/solicitarcita/ver-archivo/orden_medica/' . $archivo);
+
+        return '<a href="' . $url . '" target="_blank" style="color: #1d4ed8; font-weight: 600;">Visualizar</a>';
+    })
+    ->html(),
+
 
                 Tables\Columns\TextColumn::make('created_at') // Columna para mostrar la fecha de creación
                     ->label('Fecha de Creación')
@@ -256,41 +241,49 @@ class PacienteResource extends Resource
                         TextEntry::make('ciudad.nombre')->label('Ciudad'),
                         TextEntry::make('eps.nombre')->label('EPS'),
                         TextEntry::make('procedimiento.nombre')->label('Procedimiento'),
-                            TextEntry::make('historia_clinica')     
-                            ->label('Historia Clínica')
-                            ->formatStateUsing(function ($state) {
-                                if (!$state) {
-                                    return '<span class="text-gray-500 italic">No disponible</span>';
-                                }
-                                $url = asset('storage/' . $state);
-                                return '<a href="' . $url . '" target="_blank" class="text-blue-600 hover:underline">Visualizar</a>';
-                            })
-                            ->html(),
-                           TextEntry::make('autorizacion')     
-                            ->label('Autorización')
-                            ->formatStateUsing(function ($state) {
-                                if (!$state) {
-                                    return '<span class="text-gray-500 italic">No disponible</span>';
-                                }
-                                $url = asset('storage/' . $state);
-                                return '<a href="' . $url . '" target="_blank" class="text-blue-600 hover:underline">Visualizar</a>';
-                            })
-                            ->html(),
-                        TextEntry::make('orden_medica')
-                            ->label('Orden Médica')
-                            ->formatStateUsing(function ($state) {
-                                if (!$state) {
-                                    return '<span class="text-gray-500 italic">No disponible</span>';
-                                }
-                                $url = asset('storage/' . $state);
-                                return '<a href="' . $url . '" target="_blank" class="text-blue-600 hover:underline">Visualizar</a>';
-                            })
-                            ->html(),
+                     TextEntry::make('historia_clinica')
+    ->label('Historia Clínica')
+    ->formatStateUsing(function ($state) {
+        if (!$state) {
+            return '<span class="text-gray-500 italic">No disponible</span>';
+        }
+
+        $archivo = basename($state);
+        $url = url('/solicitarcita/ver-archivo/historia_clinica/' . $archivo);
+
+        return '<a href="' . $url . '" target="_blank" class="text-blue-600 hover:underline font-semibold">Visualizar</a>';
+    })
+    ->html(),
+
+                         TextEntry::make('autorizacion')
+    ->label('Autorización')
+    ->formatStateUsing(function ($state) {
+        if (!$state) {
+            return '<span class="text-gray-500 italic">No disponible</span>';
+        }
+
+        $archivo = basename($state);
+        $url = url('/solicitarcita/ver-archivo/autorizacion/' . $archivo);
+
+        return '<a href="' . $url . '" target="_blank" class="text-blue-600 hover:underline font-semibold">Visualizar</a>';
+    })
+    ->html(),
+TextEntry::make('orden_medica')
+    ->label('Orden Médica')
+    ->formatStateUsing(function ($state) {
+        if (!$state) {
+            return '<span class="text-gray-500 italic">No disponible</span>';
+        }
+
+        $archivo = basename($state);
+        $url = url('/solicitarcita/ver-archivo/orden_medica/' . $archivo);
+
+        return '<a href="' . $url . '" target="_blank" class="text-blue-600 hover:underline font-semibold">Visualizar</a>';
+    })
+    ->html(),
+
                         TextEntry::make('created_at')->label('Fecha de Creación')
                             ->dateTime('d/m/Y H:i:s'),
-                    
-
-
                     
                     ])->columns(2),
             ])
