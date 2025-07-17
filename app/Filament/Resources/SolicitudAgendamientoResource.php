@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Enums\SolicitudEstado;
 use App\Enums\SolicitudEstadoAgendamiento;
+use App\Models\Agendamiento;
 use App\Models\Solicitud_Admision;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\BadgeColumn;
@@ -30,8 +31,8 @@ class SolicitudAgendamientoResource extends Resource
 protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
       protected static ?string $navigationGroup = 'Agendamiento';
     protected static ?int $navigationSort = 1;
-    protected static ?string $navigationLabel = 'Agendamiento';
-    protected static ?string $modelLabel = 'Gestión de Agenda ';
+    protected static ?string $navigationLabel = 'Solicitudes Agendamiento';
+    protected static ?string $modelLabel = 'Solicitudes para Agendar Citas' ;
 
 
      public static function getNavigationBadge(): ?string
@@ -209,9 +210,14 @@ protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                ->label('Gestionar Solicitud') // Cambia el texto del botón
-                ->icon('heroicon-o-pencil-square'),
+                 Tables\Actions\Action::make('Responder')
+            ->url(fn (Solicitud_Admision $record): string => AgendamientoResource::getUrl('create', [
+                // Asegúrate de que el nombre del parámetro sea 'fk_paciente'
+                // Y que el valor sea el ID correcto del paciente de la tabla 'pacientes'
+                'fk_solicitud_admision' => $record->id_solicitud_admision, // O $record->id si el ID de tu tabla Paciente es 'id'
+            ]))
+            ->icon('heroicon-o-chat-bubble-left-right')
+            ->color('primary'),
 
                      Tables\Actions\ViewAction::make()
             ->label('Ver Detalles')

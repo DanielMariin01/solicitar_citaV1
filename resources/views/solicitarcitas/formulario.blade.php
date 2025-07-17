@@ -389,7 +389,7 @@ select {
         name="observacion" 
         id="observacion" 
         rows="4"
-        placeholder="Ingrese aquí comentarios adicionales"
+        placeholder="Ingrese aquí cualquier comentario adicional. Por ejemplo: si su examen requiere sedación."
         class="form-control @error('observacion') is-invalid @else @if(old('observacion')) is-valid @endif @enderror"
     >{{ old('observacion') }}</textarea>
     @error('observacion')
