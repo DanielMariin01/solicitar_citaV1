@@ -150,7 +150,7 @@
     <li><strong>Fecha Agendada:</strong> {{ $fecha ?? 'No asignada' }}</li>
     <li><strong>Hora Agendada:</strong> {{ $hora ?? 'No asignada' }}</li>
    <li><strong>Procedimiento:</strong> {{ $procedimiento ?? 'No disponible' }}</li>
-      <li><strong>Nombre de la Sede:</strong> {{ $sedeNombre }}</li>
+    <li><strong>Nombre de la Sede:</strong> {{ $sedeNombre }}</li>
     <li><strong>Dirección:</strong> {{ $sedeDireccion }}</li>
     <li><strong>Ciudad:</strong> {{ $ciudadNombre }}</li>
      <li><strong>Observación:</strong> {{ $comentario ?? 'Ninguno' }}</li>

@@ -4,6 +4,7 @@ namespace App\Filament\AdminMedico\Resources;
 
 use App\Filament\AdminMedico\Resources\SolicitudMedicoResource\Pages;
 use App\Filament\AdminMedico\Resources\SolicitudMedicoResource\RelationManagers;
+use App\Models\EPS;
 use App\Models\Solicitud_Admision;
 use App\Models\SolicitudMedico;
 use Filament\Forms;
@@ -20,6 +21,7 @@ use Filament\Tables\Columns\BadgeColumn;
 use Illuminate\Support\Facades\Crypt;
 use Filament\Infolists\Components\Fieldset;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Tables\Filters\SelectFilter;
 
 class SolicitudMedicoResource extends Resource
 {
@@ -101,6 +103,10 @@ class SolicitudMedicoResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->formatStateUsing(fn ($state) => Crypt::decryptString($state)),
+                Tables\Columns\TextColumn::make('paciente.eps.nombre')
+                    ->label('EPS')
+                    ->sortable()
+                    ->searchable(),
                     
                  Tables\Columns\TextColumn::make('paciente.procedimiento.nombre')
                     ->label('Procedimiento')
@@ -201,11 +207,30 @@ class SolicitudMedicoResource extends Resource
             ])
              ->defaultPaginationPageOption(10)
             ->paginationPageOptions([10, 25, 50, 100])
+
+
             ->filters([
-                  Tables\Filters\SelectFilter::make('id_eps')
-                    ->label('EPS')
-                  ->relationship('eps', 'nombre'),
+
+
+SelectFilter::make('fk_eps')
+    ->label('EPS')
+    ->options(function () {
+        return Eps::all()->pluck('nombre', 'id_eps')->toArray();
+    })
+    ->searchable()
+    ->query(function (Builder $query, array $data): Builder {
+        return $query->whereHas('paciente', function (Builder $q) use ($data) {
+            if (isset($data['value'])) {
+                $q->where('fk_eps', $data['value']);
+            }
+        });
+    }),
+
+
             ])
+
+
+
             ->actions([
              
                   Tables\Actions\EditAction::make()

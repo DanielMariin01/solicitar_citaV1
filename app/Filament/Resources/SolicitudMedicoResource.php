@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\SolicitudMedicoResource\Pages;
 use App\Filament\Resources\SolicitudMedicoResource\RelationManagers;
+use App\Models\EPS;
 use App\Models\Solicitud_Medico;
 use App\Models\SolicitudMedico;
 use Filament\Forms;
@@ -19,7 +20,7 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Infolists\Components\Fieldset;
 use Filament\Infolists\Components\TextEntry;
-
+use Filament\Tables\Filters\SelectFilter;
 
 use Illuminate\Support\Facades\Crypt;
 use App\Models\Paciente;
@@ -105,6 +106,12 @@ class SolicitudMedicoResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->formatStateUsing(fn ($state) => Crypt::decryptString($state)),
+                //campo de fk_eps
+                Tables\Columns\TextColumn::make('paciente.eps.nombre')
+                    ->label('EPS')
+                    ->sortable()
+                    ->searchable(),
+             
                
                  Tables\Columns\TextColumn::make('paciente.procedimiento.nombre')
                     ->label('Procedimiento')
@@ -206,7 +213,27 @@ class SolicitudMedicoResource extends Resource
               ->defaultPaginationPageOption(10)
             ->paginationPageOptions([10, 25, 50, 100])
             ->filters([
-                //
+                
+
+SelectFilter::make('fk_eps')
+    ->label('EPS')
+    ->options(function () {
+        return EPS::all()->pluck('nombre', 'id_eps')->toArray();
+    })
+    ->searchable()
+    ->query(function (Builder $query, array $data): Builder {
+        return $query->whereHas('paciente', function (Builder $q) use ($data) {
+            if (isset($data['value'])) {
+                $q->where('fk_eps', $data['value']);
+            }
+        });
+    }),
+
+
+
+
+
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make()

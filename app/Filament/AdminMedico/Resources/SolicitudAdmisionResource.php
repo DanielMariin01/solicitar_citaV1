@@ -4,6 +4,7 @@ namespace App\Filament\AdminMedico\Resources;
 
 use App\Filament\AdminMedico\Resources\SolicitudAdmisionResource\Pages;
 use App\Filament\AdminMedico\Resources\SolicitudAdmisionResource\RelationManagers;
+use App\Models\EPS;
 use App\Models\Solicitud_Admision;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -19,7 +20,7 @@ use App\Enums\SolicitudEstado;
 use App\Models\Paciente;
 use Filament\Infolists\Components\Fieldset;
 use Filament\Infolists\Components\TextEntry;
-
+use Filament\Tables\Filters\SelectFilter;
 class SolicitudAdmisionResource extends Resource
 {
     protected static ?string $model = Solicitud_Admision::class;
@@ -100,6 +101,11 @@ class SolicitudAdmisionResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->formatStateUsing(fn ($state) => Crypt::decryptString($state)),
+
+                    Tables\Columns\TextColumn::make('paciente.eps.nombre')
+                    ->label('EPS')
+                    ->sortable()
+                    ->searchable(),
                     
                  Tables\Columns\TextColumn::make('paciente.procedimiento.nombre')
                     ->label('Procedimiento')
@@ -212,9 +218,29 @@ class SolicitudAdmisionResource extends Resource
                         \App\Enums\SolicitudEstado::FINALIZADA->value => 'Finalizada',
                     ])
                     ->searchable(),
-                   Tables\Filters\SelectFilter::make('id_eps')
-                    ->label('EPS')
-                  ->relationship('eps', 'nombre'),
+               
+                    
+
+SelectFilter::make('fk_eps')
+    ->label('EPS')
+    ->options(function () {
+        return EPS::all()->pluck('nombre', 'id_eps')->toArray();
+    })
+    ->searchable()
+    ->query(function (Builder $query, array $data): Builder {
+        return $query->whereHas('paciente', function (Builder $q) use ($data) {
+            if (isset($data['value'])) {
+                $q->where('fk_eps', $data['value']);
+            }
+        });
+    }),
+
+
+
+
+
+
+
            Tables\Filters\SelectFilter::make('paciente.numero_identificacion')
                     ->label('Número de Identificación')
                     ->placeholder('Buscar o seleccionar número')

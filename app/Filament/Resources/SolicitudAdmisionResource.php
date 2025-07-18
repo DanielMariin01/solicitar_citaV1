@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\SolicitudAdmisionResource\Pages;
 
+use App\Models\EPS;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -17,7 +18,7 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\BadgeColumn;
 use App\Models\Paciente;
 use Illuminate\Support\Facades\Crypt;
-
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\Fieldset;
 use Filament\Infolists\Components\TextEntry;
@@ -116,6 +117,12 @@ class SolicitudAdmisionResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->formatStateUsing(fn ($state) => Crypt::decryptString($state)),
+
+                Tables\Columns\TextColumn::make('paciente.eps.nombre')
+                    ->label('EPS')
+                    ->sortable()
+                    ->searchable(),
+
                
                Tables\Columns\TextColumn::make('paciente.historia_clinica')
     ->label('Historia Clínica')
@@ -218,6 +225,24 @@ class SolicitudAdmisionResource extends Resource
             ->defaultPaginationPageOption(10)
             ->paginationPageOptions([10, 25, 50, 100])
             ->filters([
+
+SelectFilter::make('fk_eps')
+    ->label('EPS')
+    ->options(function () {
+        return EPS::all()->pluck('nombre', 'id_eps')->toArray();
+    })
+    ->searchable()
+    ->query(function (Builder $query, array $data): Builder {
+        return $query->whereHas('paciente', function (Builder $q) use ($data) {
+            if (isset($data['value'])) {
+                $q->where('fk_eps', $data['value']);
+            }
+        });
+    }),
+
+
+
+
                  Tables\Filters\SelectFilter::make('estado')
                     ->label('Estado')
                     ->options([
@@ -228,9 +253,7 @@ class SolicitudAdmisionResource extends Resource
                         \App\Enums\SolicitudEstado::FINALIZADA->value => 'Finalizada',
                     ])
                     ->searchable(),
-                   Tables\Filters\SelectFilter::make('id_eps')
-                    ->label('EPS')
-                  ->relationship('eps', 'nombre'),
+                 
 
                   
            Tables\Filters\SelectFilter::make('paciente.numero_identificacion')

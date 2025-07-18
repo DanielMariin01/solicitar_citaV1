@@ -208,6 +208,8 @@ class PacienteResource extends Resource
                     Tables\Filters\SelectFilter::make('id_eps')
                     ->label('EPS')
                   ->relationship('eps', 'nombre')
+                    ->searchable()
+                    ->placeholder('Seleccionar EPS'),
                 //
             ])
             

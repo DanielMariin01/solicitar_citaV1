@@ -4,6 +4,7 @@ namespace App\Filament\Agendar\Resources;
 
 use App\Filament\Agendar\Resources\SolicitudAgendamientoResource\Pages;
 use App\Filament\Agendar\Resources\SolicitudAgendamientoResource\RelationManagers;
+use App\Models\EPS;
 use App\Models\SolicitudAgendamiento;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -19,19 +20,18 @@ use App\Models\Solicitud_Admision;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\Fieldset;
-
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Support\Facades\Crypt;
 
 
 class SolicitudAgendamientoResource extends Resource
 {
     protected static ?string $model = Solicitud_Admision::class;
-
 protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
       protected static ?string $navigationGroup = 'Agendamiento';
     protected static ?int $navigationSort = 1;
-    protected static ?string $navigationLabel = 'Agendamiento';
-    protected static ?string $modelLabel = 'Gestión de Agenda ';
+    protected static ?string $navigationLabel = 'Solicitudes Agendamiento';
+    protected static ?string $modelLabel = 'Solicitudes para Agendar Citas' ;
 
 
      public static function getNavigationBadge(): ?string
@@ -50,7 +50,7 @@ protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('estado')
+                     Forms\Components\Select::make('estado')
                     ->label('Estado de Solicitud')
                     ->options(SolicitudEstadoAgendamiento::class)
                     ->required()
@@ -59,6 +59,10 @@ protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
                     ->label('Observación')
                     ->maxLength(1000)
                     ->required()
+                //campo para fecha y hora
+             
+
+                
                     // Elimina ->dehydrateStateUsing(fn (string $state) => null)
                     // Elimina ->default(null)
                     // Elimina ->fillFromModel(false)
@@ -70,14 +74,13 @@ protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
                         $component->state(null);
                     })
             ]);
-
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                 Tables\Columns\TextColumn::make('id_solicitud_admision')
+                Tables\Columns\TextColumn::make('id_solicitud_admision')
                     ->label('ID Solicitud')
                     ->sortable()
                     ->searchable(),
@@ -101,7 +104,12 @@ protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
                     ->sortable()
                     ->searchable()
                     ->formatStateUsing(fn ($state) => Crypt::decryptString($state)),
-                
+
+                    Tables\Columns\TextColumn::make('paciente.eps.nombre')
+                    ->label('EPS')
+                    ->sortable()
+                    ->searchable(),
+                    
                  Tables\Columns\TextColumn::make('paciente.procedimiento.nombre')
                     ->label('Procedimiento')
                     ->limit(1000)
@@ -112,7 +120,7 @@ protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
                         'class' => 'whitespace-normal', // Asegura que el texto se envuelva (aunque ->wrap() ya lo hace)
                         'style' => 'max-width: 300px; word-break: break-word;', // Ayuda con palabras muy largas
                     ]), 
-               
+
                
                  Tables\Columns\TextColumn::make('paciente.historia_clinica')
     ->label('Historia Clínica')
@@ -159,6 +167,7 @@ protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
     })
     ->html(),
 
+
             
                 BadgeColumn::make('estado')
                     ->label('Estado')
@@ -197,20 +206,38 @@ protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label('Fecha de Actualización')
                     ->dateTime('d/m/Y H:i:s'),
+       
             ])
-              ->defaultPaginationPageOption(10)
+            ->defaultPaginationPageOption(10)
             ->paginationPageOptions([10, 25, 50, 100])
             ->filters([
-                Tables\Filters\SelectFilter::make('id_eps')
-                    ->label('EPS')
-                  ->relationship('eps', 'nombre'),
+
+SelectFilter::make('fk_eps')
+    ->label('EPS')
+    ->options(function () {
+        return EPS::all()->pluck('nombre', 'id_eps')->toArray();
+    })
+    ->searchable()
+    ->query(function (Builder $query, array $data): Builder {
+        return $query->whereHas('paciente', function (Builder $q) use ($data) {
+            if (isset($data['value'])) {
+                $q->where('fk_eps', $data['value']);
+            }
+        });
+    }),
+                //
             ])
             ->actions([
-                  Tables\Actions\EditAction::make()
-                ->label('Gestionar Solicitud') // Cambia el texto del botón
-                ->icon('heroicon-o-pencil-square'),
+                 Tables\Actions\Action::make('Responder')
+            ->url(fn (Solicitud_Admision $record): string => AgendamientoResource::getUrl('create', [
+                // Asegúrate de que el nombre del parámetro sea 'fk_paciente'
+                // Y que el valor sea el ID correcto del paciente de la tabla 'pacientes'
+                'fk_solicitud_admision' => $record->id_solicitud_admision, // O $record->id si el ID de tu tabla Paciente es 'id'
+            ]))
+            ->icon('heroicon-o-chat-bubble-left-right')
+            ->color('primary'),
 
-                    Tables\Actions\ViewAction::make()
+                     Tables\Actions\ViewAction::make()
             ->label('Ver Detalles')
             ->icon('heroicon-o-eye')
             ->modalHeading('Detalles de la Solicitud')
@@ -247,7 +274,8 @@ protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
                         TextEntry::make('paciente.ciudad.nombre')->label('Ciudad'),
                         TextEntry::make('paciente.eps.nombre')->label('EPS'),
 
-                          TextEntry::make('paciente.historia_clinica')
+                           
+                   TextEntry::make('paciente.historia_clinica')
     ->label('Historia Clínica')
     ->formatStateUsing(function ($state) {
         if (!$state) {
@@ -299,12 +327,14 @@ TextEntry::make('paciente.orden_medica')
             ])
             ->slideOver()
             ->closeModalByClickingAway(true),
+            
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+                ->defaultSort('created_at', 'asc');
     }
 
     public static function getRelations(): array
@@ -322,7 +352,8 @@ TextEntry::make('paciente.orden_medica')
             'edit' => Pages\EditSolicitudAgendamiento::route('/{record}/edit'),
         ];
     }
-             public static function getEloquentQuery(): Builder
+
+          public static function getEloquentQuery(): Builder
     {
         // Esto filtrará la tabla para que solo muestre registros donde 'estado' sea 'aprobada'.
         // Los usuarios no podrán cambiar este filtro desde la UI.
