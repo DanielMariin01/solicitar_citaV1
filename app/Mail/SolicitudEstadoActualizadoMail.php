@@ -140,7 +140,7 @@ class SolicitudEstadoActualizadoMail extends Mailable
                 'estado'                => $this->estadoNuevo,
                 'comentarioSolicitud'   => $comentarioSolicitud,
                 'estadoNuevo'           => $this->estadoNuevo,
-                'idSolicitud' => $this->solicitudAdmision->id_solicitud_admision,  
+                
                 // Si tienes más campos en la vista, asegúrate de añadirlos aquí con su lógica de desencriptación
             ],
         );
