@@ -44,6 +44,13 @@ public function guardar(Request $request)
         'orden_medica'     => 'required|mimes:pdf,jpg,jpeg|max:2048',
         'estado'           => 'nullable|string|max:255',
         'observacion'      => 'nullable|string|max:1000',
+     'acepto_terminos' => ['required', 'accepted'], // <-- Aquí termina el array de reglas
+], [ // <-- Aquí comienza el array de mensajes personalizados
+    // Mensajes personalizados para tus reglas
+
+    'acepto_terminos.required' => 'Debes aceptar los términos.',
+    'acepto_terminos.accepted' => 'Debes aceptar los términos y condiciones.',
+
     ]);
 
     // Guardar archivos

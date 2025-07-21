@@ -448,7 +448,15 @@ select {
         <!--</div>
         <!--<div class="error">Debes aceptar antes de continuar.</div>
       <!--</div>--->
-
+<div class="mb-4">
+    <input type="checkbox" id="acepto_terminos" name="acepto_terminos" required class="mr-2">
+    <label for="acepto_terminos" class="text-sm text-gray-700">
+  Acepto política y tratamiento de datos personales
+    </label>
+    @error('acepto_terminos')
+        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+    @enderror
+</div>
       <button type="submit" class="btn-submit" id="btnSubmitForm">Solicitar Cita</button>
    <div class="contact-info">
     <h3>Líneas de Atención</h3>
@@ -456,6 +464,9 @@ select {
     <p><i class="bi bi-telephone-fill phone-icon"></i> <strong>CEDICAF:</strong> CITAS: (606) 340 2111</p>
     <p><i class="bi bi-telephone-fill phone-icon"></i> <strong>DIAXME:</strong> CITAS: (608) 6836182</p>
 </div>
+   <div class="mt-8 text-center text-gray-500 text-[10px]"> {{-- Cambiado de 'text-xs' a 'text-[10px]' --}}
+        &copy; Creado por Daniel Stiven Marín
+    </div>
     </form>
   </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
