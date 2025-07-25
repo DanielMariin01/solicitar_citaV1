@@ -190,7 +190,12 @@ select {
 <body>
   <div class="form-container">
         <img src="{{ asset('imagenes/logo.png') }}" alt="Logo" style="display:block; margin:0 auto 20px auto; max-width:160px;">
+      
     <h2>Solicitar Cita</h2>
+       <p style="text-align: center; margin-bottom: 20px; color: #555; font-size: 14px; line-height: 1.5;">
+            Este formulario es únicamente para solicitar procedimientos especiales. Por favor diligencie todos los campos.
+            Si su solicitud es diferente, comuníquese con nuestras líneas de atención disponibles al final de esta página y con gusto lo atenderemos.
+        </p>
     <form action="{{ route('solicitar-cita.guardar') }}" method="POST" enctype="multipart/form-data" id="formularioCita">   
     @csrf
    <div class="form-group half">
@@ -405,6 +410,17 @@ select {
     $acceptedFileTypes = '.pdf,.jpg';
 @endphp
 
+
+@include('components.component-archivo', [
+    'id' => 'orden_medica', // Se asignará como ID del input y en el 'for' del label
+    'name' => 'orden_medica', // Se asignará como nombre del input (Laravel lo usará para $request->historia_clinica)
+    'label' => 'Orden Médica',
+    'helpText' => 'Suba aquí la orden médica',
+    'multiple' => false, // O true, según necesites
+    'required' => true,
+    'accept' => $acceptedFileTypes,
+     'descriptionText' =>  "(Es el documento emitido por su médico tratante que solicita el procedimiento o examen.)",
+])
 {{-- Campo para HISTORIA CLÍNICA --}}
 {{-- Aquí le pasamos 'historia_clinica' como $id y $name --}}
 @include('components.component-archivo', [
@@ -412,7 +428,7 @@ select {
     'name' => 'historia_clinica', // Se asignará como nombre del input (Laravel lo usará para $request->historia_clinica)
     'label' => 'Historia Clínica',
     'helpText' => 'Suba aquí la historia clínica',
-    'descriptionText' =>  "Es un documento con información sobre tu estado de salud y tratamientos previos.",
+    'descriptionText' =>  "(Es un documento con información sobre su estado de salud y tratamientos previos.)",
     'multiple' => false, // O true, según necesites
     'required' => true,
     'accept' => $acceptedFileTypes,
@@ -425,22 +441,13 @@ select {
     'label' => 'Autorización',
     'helpText' => 'Suba aquí la autorización',
     'multiple' => false, // O true, según necesites
-    'required' => true,
+    'required' => false,
     'accept' => $acceptedFileTypes,
-    'descriptionText' =>  "Documento de tu aseguradora (EPS/Medicina Prepagada) que aprueba el servicio médico.",
+    'descriptionText' =>  "(Documento de su aseguradora (EPS/Medicina Prepagada) que aprueba el servicio médico. La autorización no es necesaria para particulares)",
 ])
 
 
-@include('components.component-archivo', [
-    'id' => 'orden_medica', // Se asignará como ID del input y en el 'for' del label
-    'name' => 'orden_medica', // Se asignará como nombre del input (Laravel lo usará para $request->historia_clinica)
-    'label' => 'Orden Médica',
-    'helpText' => 'Suba aquí la orden médica',
-    'multiple' => false, // O true, según necesites
-    'required' => true,
-    'accept' => $acceptedFileTypes,
-     'descriptionText' =>  "Es el documento emitido por tu médico que solicita un procedimiento o examen.",
-])
+
       <!--<div class="form-group">
         <!--<div class="form-check">
           <!--<input type="checkbox" id="terms" />
@@ -461,8 +468,8 @@ select {
    <div class="contact-info">
     <h3>Líneas de Atención</h3>
     <p><i class="bi bi-telephone-fill phone-icon"></i> <strong>Radiólogos Asociados:</strong> CITAS: (606) 340 23 33</p>
-    <p><i class="bi bi-telephone-fill phone-icon"></i> <strong>CEDICAF:</strong> CITAS: (606) 340 2111</p>
-    <p><i class="bi bi-telephone-fill phone-icon"></i> <strong>DIAXME:</strong> CITAS: (608) 6836182</p>
+    <p><i class="bi bi-telephone-fill phone-icon"></i> <strong>CEDICAF:</strong> CITAS: (606) 340 21 11</p>
+    <p><i class="bi bi-telephone-fill phone-icon"></i> <strong>DIAXME:</strong> CITAS: (608) 683 61 82</p>
 </div>
    <div class="mt-8 text-center text-gray-500 text-[10px]"> {{-- Cambiado de 'text-xs' a 'text-[10px]' --}}
         &copy; Creado por Daniel Stiven Marín
@@ -507,7 +514,7 @@ $('#tipo_identificacion').select2({ // Si lo tienes
                     return 'Por favor, ingrese ' + remainingChars + ' o más caracteres para buscar.';
                 },
                 noResults: function() {
-                    return 'No se encontraron resultados. Por favor, intente con otra búsqueda o comuníquese con nuestras líneas de atención.';
+                    return 'No se encontró ningún resultado. Intente de nuevo usando las letras iniciales del procedimiento. Si tiene problemas, puede llamarnos a los números que aparecen al final de esta página y con gusto lo atenderemos.';
                 },
                 searching: function() {
                     return 'Buscando...';
@@ -564,40 +571,7 @@ $('#tipo_identificacion').select2({ // Si lo tienes
             });
         });
 
-      const numeroIdentificacionInput = document.getElementById('numero_identificacion');
-const numeroIdentificacionHelpText = document.getElementById('numero-identificacion-help'); // Si añadiste el small tag opcional
-
-if (numeroIdentificacionInput) {
-    numeroIdentificacionInput.addEventListener('input', function() {
-        const originalValue = this.value;
-        // Reemplaza CUALQUIER COSA QUE NO SEA UN DÍGITO (0-9) con una cadena vacía
-        const cleanedValue = originalValue.replace(/[^0-9]/g, '');
-
-        if (originalValue !== cleanedValue) {
-            this.value = cleanedValue;
-            // Mostrar mensaje de ayuda si había caracteres no permitidos
-            if (numeroIdentificacionHelpText) {
-                numeroIdentificacionHelpText.classList.remove('d-none');
-                numeroIdentificacionHelpText.textContent = 'Solo se permiten dígitos numéricos';
-                numeroIdentificacionHelpText.style.color = 'orange'; // Resaltar el aviso
-            }
-        } else {
-            // Ocultar mensaje si el valor es válido o se ha limpiado y no hay errores
-            if (numeroIdentificacionHelpText && cleanedValue.length > 0) { // Ocultar solo si hay algo escrito
-                numeroIdentificacionHelpText.classList.add('d-none');
-                numeroIdentificacionHelpText.textContent = ''; // Limpiar el texto
-            }
-        }
-    });
-
-    // Ocultar el mensaje si el campo se borra o se pierde el foco y está vacío
-    numeroIdentificacionInput.addEventListener('blur', function() {
-        if (numeroIdentificacionHelpText && this.value === '') {
-            numeroIdentificacionHelpText.classList.add('d-none');
-        }
-    });
-}
-
+      
 
 // NUEVO CÓDIGO - Lógica para el campo Celular: solo 10 dígitos numéricos
 // ================================================================
