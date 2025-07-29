@@ -40,7 +40,7 @@ public function guardar(Request $request)
         'id_eps'           => 'required|exists:tipo_eps,id_eps',
         'celular'          => 'required|string|max:255',
         'historia_clinica' => 'required|mimes:pdf,jpg,jpeg|max:2048',
-        'autorizacion'     => 'required|mimes:pdf,jpg,jpeg|max:2048',
+        'autorizacion'     => 'nullable|mimes:pdf,jpg,jpeg|max:2048',
         'orden_medica'     => 'required|mimes:pdf,jpg,jpeg|max:2048',
         'estado'           => 'nullable|string|max:255',
         'observacion'      => 'nullable|string|max:1000',
@@ -55,7 +55,10 @@ public function guardar(Request $request)
 
     // Guardar archivos
     $historiaPath = $request->file('historia_clinica')->store('archivos/historia_clinica', 'public');
+ $autorizacionPath = null;
+if ($request->hasFile('autorizacion')) {
     $autorizacionPath = $request->file('autorizacion')->store('archivos/autorizacion', 'public');
+}
     $ordenPath = $request->file('orden_medica')->store('archivos/orden_medica', 'public');
 
     // Crear la solicitud

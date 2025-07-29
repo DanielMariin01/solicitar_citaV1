@@ -15,7 +15,7 @@
     <label class="form-label">{{ $label }}</label>
  @if ($descriptionText)
         <small class="form-text text-muted mb-2">
-            {{ $descriptionText }}
+         {!! $descriptionText !!}
         </small>
     @endif
     <div class="upload-area" id="{{ $id }}-area">

@@ -161,7 +161,6 @@
 
                             <p>Por favor, revisa el nuevo estado. Si tienes alguna pregunta, no dudes en contactarnos.</p>
 
-                            <p>Gracias por confiar en nosotros,</p>
                         
                         </td>
                     </tr>

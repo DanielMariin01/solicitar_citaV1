@@ -245,6 +245,10 @@ select {
           <option value="cc">Cédula</option>
           <option value="ce">Cédula Extranjera</option>
           <option value="ti">Tarjeta de Identidad</option>
+         <option value="permiso especial de permanencia">Permiso especial de permanencia</option>    
+          <option value="permiso de protección">Permiso por protección temporal</option>
+          <option value="registro civil">Registro civil</option>
+        <option value="nacido vivo">Certificado de nacido vivo</option>
         </select>
       </div>
 
@@ -293,7 +297,7 @@ select {
 </div>
 
  <div class="form-group half">
-    <label for="correo" class="form-label">Correo</label>
+    <label for="correo" class="form-label">Correo electrónico </label>
     <input
         type="email" {{-- CAMBIADO DE "text" A "email" --}}
         name="correo"
@@ -335,10 +339,28 @@ select {
        
     @enderror
 </div>
- 
+
+
+    {{-- CORREO DE CONFIRMACION--}}
+<div class="form-group half">
+  <label for="correo_electronico_confirmacion">Confirmar correo electrónico</label>
+  <input
+    type="email"
+    class="form-control"
+    id="correo_confirmacion"
+    name="correo_electronico_confirmacion"
+    placeholder="Confirma tu correo electrónico"
+    required
+  >
+  <div class="invalid-feedback">Los correos no coinciden.</div>
+</div>
+
+
+
 
 <div class="form-group half">
-    <label for="id_eps" class="form-label">Seleccione su EPS</label>
+    <label for="id_eps" class="form-label">Seleccione su entidad</label>
+  <small class="form-text text-muted mt-0">Ejemplo: particular, medicina prepagada, EPS</small>
     <select 
         name="id_eps" 
         id="id_eps" 
@@ -443,27 +465,24 @@ select {
     'multiple' => false, // O true, según necesites
     'required' => false,
     'accept' => $acceptedFileTypes,
-    'descriptionText' =>  "(Documento de su aseguradora (EPS/Medicina Prepagada) que aprueba el servicio médico. La autorización no es necesaria para particulares)",
+   'descriptionText' => '(Documento de su aseguradora (EPS/Medicina Prepagada) que aprueba el servicio médico. <strong>La autorización no es necesaria para particulares</strong>)',
 ])
 
 
 
-      <!--<div class="form-group">
-        <!--<div class="form-check">
-          <!--<input type="checkbox" id="terms" />
-          <!--<label for="terms">Acepto términos y condiciones</label>
-        <!--</div>
-        <!--<div class="error">Debes aceptar antes de continuar.</div>
-      <!--</div>--->
-<div class="mb-4">
-    <input type="checkbox" id="acepto_terminos" name="acepto_terminos" required class="mr-2">
-    <label for="acepto_terminos" class="text-sm text-gray-700">
-  Acepto política y tratamiento de datos personales
+ 
+<div class="mb-4 flex items-start">
+    <input type="checkbox" id="acepto_terminos" name="acepto_terminos" required class="mt-1 mr-2">
+    <label for="acepto_terminos" class="text-sm text-gray-700 leading-tight">
+        Acepto la 
+        <a href="https://radiologos.co/politica-de-proteccion-de-datos/" target="_blank" class="text-blue-600 underline hover:text-blue-800">
+            política y tratamiento de datos personales
+        </a>
     </label>
-    @error('acepto_terminos')
-        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-    @enderror
 </div>
+@error('acepto_terminos')
+    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+@enderror
       <button type="submit" class="btn-submit" id="btnSubmitForm">Solicitar Cita</button>
    <div class="contact-info">
     <h3>Líneas de Atención</h3>
@@ -623,37 +642,7 @@ if (celularInput) {
     });
 }
 
-// ================================================================
-// NUEVO CÓDIGO (Opcional) - Lógica para el campo Correo Electrónico
-// ================================================================
-const correoInput = document.getElementById('correo');
-const correoHelpText = document.getElementById('correo-help');
 
-if (correoInput && correoHelpText) {
-    correoInput.addEventListener('input', function() {
-        // La validación nativa de HTML5 con type="email" es bastante buena.
-        // Aquí solo actualizamos el mensaje de ayuda si el campo está vacío
-        // o si queremos reforzar el patrón.
-        if (this.value.length === 0) {
-            correoHelpText.classList.remove('d-none');
-            correoHelpText.textContent = 'Ingrese su correo electrónico.';
-            correoHelpText.style.color = '#6c757d'; // Color de texto normal
-        } else if (!correoInput.checkValidity()) { // checkValidity() usa la validación nativa del navegador
-            correoHelpText.classList.remove('d-none');
-            correoHelpText.textContent = 'Por favor, ingrese un formato de correo electrónico válido.';
-            correoHelpText.style.color = 'orange';
-        } else {
-            correoHelpText.classList.add('d-none');
-            correoHelpText.textContent = '';
-        }
-    });
-
-    correoInput.addEventListener('blur', function() {
-        if (correoHelpText && this.value === '') {
-            correoHelpText.classList.add('d-none');
-        }
-    });
-}
 
 const formCita = document.getElementById('formularioCita'); // Asegúrate de que tu formulario tiene id="formCita"
 const btnSubmitForm = document.getElementById('btnSubmitForm'); // Asegúrate de que tu botón tiene id="btnSubmitForm"
@@ -661,12 +650,12 @@ const btnSubmitForm = document.getElementById('btnSubmitForm'); // Asegúrate de
 if (formCita && btnSubmitForm) {
     formCita.addEventListener('submit', function() {
         // Deshabilitar el botón para evitar múltiples envíos
-        btnSubmitForm.disabled = true;
+        //btnSubmitForm.disabled = true;
         // Cambiar el texto y añadir un spinner de Bootstrap
-        btnSubmitForm.innerHTML = `
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            Enviando solicitud...
-        `;
+        //btnSubmitForm.innerHTML = `
+            //<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            //Enviando solicitud...
+        //`;
     });
 }
 
@@ -689,6 +678,75 @@ if (formCita && btnSubmitForm) {
             showConfirmButton: true
         });
         @endif
+
+
+
+
+    const form = document.getElementById('formularioCita');
+    const correo1 = document.getElementById('correo');
+    const correo2 = document.getElementById('correo_confirmacion');
+
+    if (form && correo1 && correo2) {
+        form.addEventListener('submit', function (e) {
+            // Verificar si los correos coinciden
+            if (correo1.value.trim() !== correo2.value.trim()) {
+                e.preventDefault(); // Detiene el envío
+
+                correo1.classList.add('is-invalid');
+                correo2.classList.add('is-invalid');
+
+                // Mostrar alerta
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Los correos electrónicos no coinciden.',
+                });
+            } else {
+                // Limpiar clases si coinciden
+                correo1.classList.remove('is-invalid');
+                correo2.classList.remove('is-invalid');
+            }
+        });
+    }
+
+   // ================================================================
+        // Lógica para validar el campo de correo electrónico
+        // ================================================================
+ const inputCorreo = document.getElementById("correo");
+    inputCorreo.addEventListener("input", function () {
+        const correo = inputCorreo.value;
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!regex.test(correo)) {
+            inputCorreo.classList.add("is-invalid");
+            inputCorreo.classList.remove("is-valid");
+
+            // Mostrar mensaje
+            let mensaje = document.querySelector("#correo-error");
+            if (!mensaje) {
+                mensaje = document.createElement("div");
+                mensaje.id = "correo-error";
+                mensaje.classList.add("invalid-feedback");
+                mensaje.textContent = "Ingrese un correo válido (ej: usuario@ejemplo.com)";
+                inputCorreo.parentNode.appendChild(mensaje);
+            }
+        } else {
+            inputCorreo.classList.remove("is-invalid");
+            inputCorreo.classList.add("is-valid");
+
+            // Ocultar mensaje si ya es válido
+            let mensaje = document.querySelector("#correo-error");
+            if (mensaje) mensaje.remove();
+        }
+    });
+
+
+
+
+
+
+
+
 
     </script>
 </body>

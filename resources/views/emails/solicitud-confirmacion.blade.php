@@ -146,8 +146,8 @@
                                 <li><strong>Estado Actual:</strong> {{ $estado ?? 'Pendiente' }}</li>
                                 <li><strong>Observaciones:</strong> {{ $observaciones ?? 'Ninguna' }}</li> </ul>
 
-                            <p>Nos pondremos en contacto contigo lo antes posible para confirmar y agendar tu cita.</p>
-                            <p>Gracias por confiar en nosotros,</p>
+                            <p>Hemos recibido su solicitud. Nuestro equipo está revisando la información para asignar su cita y enviarle la confirmación correspondiente.</p>
+                         
                           
                         </td>
                     </tr>
