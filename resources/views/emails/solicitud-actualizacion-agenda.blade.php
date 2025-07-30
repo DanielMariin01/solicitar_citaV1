@@ -159,7 +159,7 @@
                             
                             </ul>
 
-                            <p>Por favor, revisa el nuevo estado. Si tienes alguna pregunta, no dudes en contactarnos.</p>
+                            <p>Si tienes alguna pregunta, no dudes en contactarnos.</p>
 
                         
                         </td>

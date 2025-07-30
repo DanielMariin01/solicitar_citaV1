@@ -682,32 +682,57 @@ if (formCita && btnSubmitForm) {
 
 
 
-    const form = document.getElementById('formularioCita');
-    const correo1 = document.getElementById('correo');
-    const correo2 = document.getElementById('correo_confirmacion');
+const form = document.getElementById('formularioCita');
+const correo1 = document.getElementById('correo');
+const correo2 = document.getElementById('correo_confirmacion');
+const btnSubmitForm = document.getElementById('btnSubmitForm');
 
-    if (form && correo1 && correo2) {
-        form.addEventListener('submit', function (e) {
-            // Verificar si los correos coinciden
-            if (correo1.value.trim() !== correo2.value.trim()) {
-                e.preventDefault(); // Detiene el envío
+if (form && correo1 && correo2 && btnSubmitForm) {
+    form.addEventListener('submit', function (e) {
+        e.preventDefault(); // Detener envío automático para manejarlo manualmente
 
-                correo1.classList.add('is-invalid');
-                correo2.classList.add('is-invalid');
+        // Validar correos
+        if (correo1.value.trim() !== correo2.value.trim()) {
+            correo1.classList.add('is-invalid');
+            correo2.classList.add('is-invalid');
 
-                // Mostrar alerta
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Los correos electrónicos no coinciden.',
-                });
-            } else {
-                // Limpiar clases si coinciden
-                correo1.classList.remove('is-invalid');
-                correo2.classList.remove('is-invalid');
+            // Alerta de error
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Los correos electrónicos no coinciden.',
+            });
+
+            return;
+        }
+
+        // Limpiar clases si coinciden
+        correo1.classList.remove('is-invalid');
+        correo2.classList.remove('is-invalid');
+
+        // Cambiar texto del botón y deshabilitarlo
+        btnSubmitForm.disabled = true;
+        btnSubmitForm.innerHTML = `
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Enviando solicitud...
+        `;
+
+        // Opcional: mostrar loading de SweetAlert
+        Swal.fire({
+            title: 'Enviando solicitud...',
+            html: 'Por favor, espera un momento.',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
             }
         });
-    }
+
+        // Esperar un pequeño tiempo para que el botón actualice visualmente
+       setTimeout(() => {
+           form.submit(); // Enviar el formulario
+        }, 100);
+    });
+}
 
    // ================================================================
         // Lógica para validar el campo de correo electrónico
