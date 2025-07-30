@@ -30,7 +30,7 @@ class SolicitudAdmisionResource extends Resource
         protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
       protected static ?string $navigationGroup = 'Respuesta Solicitudes';
     protected static ?int $navigationSort = 1;
-    protected static ?string $navigationLabel = 'Respuesta Solicitudes';
+    protected static ?string $navigationLabel = 'Historial de Solicitudes';
      protected static ?string $modelLabel = 'Historial de solicitudes';
    
     public static function getNavigationBadge(): ?string

@@ -33,8 +33,8 @@ class SolicitudMedicoResource extends Resource
       protected static ?string $navigationIcon = 'heroicon-o-user-circle';
       protected static ?string $navigationGroup = 'Solicitudes';
     protected static ?int $navigationSort = 1;
-    protected static ?string $navigationLabel = 'Solicitudes Médico';
-    protected static ?string $modelLabel = 'Solicitud Médico';
+    protected static ?string $navigationLabel = 'Médico ';
+    protected static ?string $modelLabel = 'Médico ';
 
 
      public static function getNavigationBadge(): ?string

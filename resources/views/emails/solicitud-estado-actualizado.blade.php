@@ -143,7 +143,7 @@
                             <h3 class="section-title">Detalles de la Solicitud:</h3>
                             <ul class="detail-list">
                     
-                                <li><strong>ID Solicitud:</strong> {{ $idSolicitud ?? 'Desconocido' }}</li> 
+                                <li><strong>Numero de Solicitud:</strong> {{ $idSolicitud ?? 'Desconocido' }}</li> 
                                 <li><strong>Estado Actual:</strong> {{ $estado ?? 'Desconocido' }}</li>
                                 <li><strong>Observación:</strong> {{ $comentario ?? 'Desconocido' }}</li>
                                 

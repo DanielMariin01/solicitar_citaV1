@@ -146,7 +146,7 @@
                             <ul class="detail-list">
                     
         
-                             <li><strong>ID de Solicitud:</strong> {{ $idSolicitud ?? 'No disponible' }}</li>
+                             <li><strong>Numero de Solicitud:</strong> {{ $idSolicitud ?? 'No disponible' }}</li>
     <li><strong>Fecha Agendada:</strong> {{ $fecha ?? 'No asignada' }}</li>
     <li><strong>Hora Agendada:</strong> {{ $hora ?? 'No asignada' }}</li>
    <li><strong>Procedimiento:</strong> {{ $procedimiento ?? 'No disponible' }}</li>

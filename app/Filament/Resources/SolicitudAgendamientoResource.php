@@ -33,8 +33,8 @@ class SolicitudAgendamientoResource extends Resource
 protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
       protected static ?string $navigationGroup = 'Agendamiento';
     protected static ?int $navigationSort = 1;
-    protected static ?string $navigationLabel = 'Solicitudes Agendamiento';
-    protected static ?string $modelLabel = 'Solicitudes para Agendar Citas' ;
+    protected static ?string $navigationLabel = 'Agendar Cita';
+    protected static ?string $modelLabel = 'Agendar Cita' ;
 
 
      public static function getNavigationBadge(): ?string
@@ -295,7 +295,7 @@ protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
 
             ->actions([
-                 Tables\Actions\Action::make('Responder')
+                 Tables\Actions\Action::make('Agendar Cita')
             ->url(fn (Solicitud_Admision $record): string => AgendamientoResource::getUrl('create', [
                 // Asegúrate de que el nombre del parámetro sea 'fk_paciente'
                 // Y que el valor sea el ID correcto del paciente de la tabla 'pacientes'

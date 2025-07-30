@@ -28,8 +28,8 @@ class PacienteResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-bell';
     protected static ?string $navigationGroup = 'Solicitudes';
     protected static ?int $navigationSort = 1;
-    protected static ?string $navigationLabel = 'Solicitudes Admisiones';
-    protected static ?string $pluralModelLabel = 'Gestión de Solicitudes'; 
+    protected static ?string $navigationLabel = 'Admisiones';
+    protected static ?string $pluralModelLabel = 'Admisiones'; // Cambiado a 'Admisiones' para reflejar el contexto de pacientes
 
      public static function getNavigationBadge(): ?string
     {

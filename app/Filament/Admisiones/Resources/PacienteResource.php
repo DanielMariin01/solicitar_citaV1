@@ -26,8 +26,8 @@ class PacienteResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-bell';
     protected static ?string $navigationGroup = 'Solicitudes';
     protected static ?int $navigationSort = 1;
-    protected static ?string $navigationLabel = 'Solicitudes Admisiones';
-    protected static ?string $pluralModelLabel = 'Gestión de Solicitudes'; 
+    protected static ?string $navigationLabel = 'Admisiones';
+    protected static ?string $pluralModelLabel = 'Admisiones'; 
      public static function getNavigationBadge(): ?string
     {
         // Esto reflejará el conteo de registros visibles bajo el scope getEloquentQuery()
