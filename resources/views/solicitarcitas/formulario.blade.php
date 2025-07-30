@@ -739,10 +739,7 @@ if (formCita && btnSubmitForm) {
             if (mensaje) mensaje.remove();
         }
     });
-
-
-
-
+ 
 
 
 
