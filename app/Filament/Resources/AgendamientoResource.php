@@ -68,7 +68,7 @@ protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
                     ->dehydrated(true),
 
 Forms\Components\FileUpload::make('preparacion')
-    ->label('Preparacion')
+    ->label('Preparación')
     ->disk('public')
     ->directory('agendamientos/preparacion')
     ->visibility('public')
@@ -79,6 +79,19 @@ Forms\Components\FileUpload::make('preparacion')
     ->openable()
     ->previewable(true),
 
+
+
+Forms\Components\FileUpload::make('recordatorio')
+    ->label('Recordatorio')
+    ->disk('public')
+    ->directory('agendamientos/recordatorio')
+    ->visibility('public')
+    ->acceptedFileTypes(['application/pdf', 'image/*'])
+    ->maxSize(2048)
+    ->preserveFilenames()
+    ->downloadable()
+    ->openable()
+    ->previewable(true),
 
     
 

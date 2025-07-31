@@ -17,6 +17,8 @@ class Agendamiento extends Model
         'fk_solicitud_admision',
         'estado',
         'fk_sede',
+        'preparacion',
+        'recordatorio',
         
 
     ];
