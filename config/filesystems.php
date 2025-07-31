@@ -56,6 +56,12 @@ return [
             'throw' => false,
         ],
 
+   'archivos_privados' => [
+    'driver' => 'local',
+    'root' => storage_path('app/archivos'),
+    'visibility' => 'private',
+],
+
     ],
 
     /*

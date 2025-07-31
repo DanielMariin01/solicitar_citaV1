@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Log; // Para los logs de depuración
 use Throwable;
 use Illuminate\Mail\Mailables\Address; 
 use Illuminate\Support\Carbon;
+use Illuminate\Mail\Mailables\Attachment;
 class SolicitudActualizacionAgendaMail extends Mailable
 {
     use Queueable, SerializesModels;
@@ -171,8 +172,26 @@ $horaFormateada = Carbon::parse($this->agendamiento->hora)->format('g:i A');
      *
      * @return array<int, \Illuminate\Mail\Mailables\Attachment>
      */
-    public function attachments(): array
-    {
-        return [];
+public function attachments(): array
+{
+    $agendamiento = $this->agendamiento;
+
+    $adjuntos = [];
+
+    // Adjuntar archivo de preparación
+    if ($agendamiento->preparacion) {
+        $adjuntos[] = Attachment::fromPath(
+            storage_path('app/archivos/' . $agendamiento->preparacion)
+        )->as('preparacion.pdf')->withMime('application/pdf');
     }
+
+    // Adjuntar archivo de recordatorio
+    if ($agendamiento->recordatorio) {
+        $adjuntos[] = Attachment::fromPath(
+            storage_path('app/archivos/' . $agendamiento->recordatorio)
+        )->as('recordatorio.pdf')->withMime('application/pdf');
+    }
+
+    return $adjuntos;
+}
 }
