@@ -65,8 +65,29 @@ protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
                     ->required() // Si es un campo obligatorio
                     ->default(fn () => request()->query('fk_solicitud_admision')) // <-- ¡AQUÍ SE PRE-RELLENA DESDE LA URL!
                     ->disabled() // Hace que el campo sea visible pero no editable por el usuario
-                    ->dehydrated(true) 
+                    ->dehydrated(true),
+
+Forms\Components\FileUpload::make('preparacion')
+    ->label('Preparacion')
+    ->disk('public')
+    ->directory('agendamientos/preparacion')
+    ->visibility('public')
+    ->acceptedFileTypes(['application/pdf', 'image/*'])
+    ->maxSize(2048)
+    ->preserveFilenames()
+    ->downloadable()
+    ->openable()
+    ->previewable(true),
+
+
+    
+
+
+
                     ]);
+
+                //agregar campo para el archivo
+
 
                  
                 // Asegura que el valor se incluya cuando se guarden los datos

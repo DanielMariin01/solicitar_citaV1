@@ -131,7 +131,7 @@
 
                     <tr>
                         <td style="padding: 0 0 20px 0;">
-                            <p><strong>Hola {{ $pacienteNombre ?? 'Usuario' }},</strong></p> <p>Hemos recibido tu solicitud de cita con éxito. A continuación, un resumen de los detalles que nos proporcionaste:</p>
+                            <p><strong>Hola {{ $pacienteNombre ?? 'Usuario' }},</strong></p> <p>Hemos recibido su solicitud de cita con éxito. A continuación, un resumen de los detalles que nos proporcionaste:</p>
 
                             <h3 class="section-title">Datos del Paciente:</h3>
                             <ul class="detail-list">

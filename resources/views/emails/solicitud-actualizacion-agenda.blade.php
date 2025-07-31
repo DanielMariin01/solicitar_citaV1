@@ -132,7 +132,7 @@
                     <tr>
                         <td style="padding: 0 0 20px 0;">
                             <p>Hola {{ $pacienteNombre ?? 'Usuario' }},</p>
-                            <p>Tu solicitud de cita ha sido agendada exitosamente. Aquí tienes los detalles:</p>
+                            <p>Su solicitud de cita ha sido agendada exitosamente. Aquí tienes los detalles:</p>
 
                             <h3 class="section-title">Datos del Paciente:</h3>
                             <ul class="detail-list">

@@ -125,14 +125,14 @@
 
                     <tr>
                         <td align="center">
-                            <h1 class="title">Actualización del Estado de tu Solicitud</h1>
+                            <h1 class="title">Actualización del Estado de su Solicitud</h1>
                         </td>
                     </tr>
 
                     <tr>
                         <td style="padding: 0 0 20px 0;">
                             <p>Hola {{ $pacienteNombre ?? 'Usuario' }},</p>
-                            <p>Te informamos que el estado de tu solicitud de cita ha sido actualizado. Aquí tienes los detalles:</p>
+                            <p>Informamos que el estado de su solicitud de cita ha sido actualizado. Aquí tienes los detalles:</p>
 
                             <h3 class="section-title">Datos del Paciente:</h3>
                             <ul class="detail-list">
